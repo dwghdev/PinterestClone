@@ -1,5 +1,6 @@
 import * as React from "react";
 import Colors from '../constants/Colors';
+import PinScreen from '../screens/PinScreen';
 import HomeScreen from '../screens/HomeScreen';
 import ModalScreen from '../screens/ModalScreen';
 import ProfileScreen from '../screens/ProfileScreen';
@@ -47,19 +48,28 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 function RootNavigator() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
-      <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
-      <Stack.Group screenOptions={{ presentation: 'modal' }}>
+      <Stack.Screen 
+        name="Root" 
+        component={BottomTabNavigator} 
+        options={{ headerShown: false }} 
+        />
+      <Stack.Screen 
+        name="Pin" 
+        component={PinScreen} 
+        options={{ headerShown: false }} 
+        />
+      <Stack.Screen 
+        name="NotFound" 
+        component={NotFoundScreen} 
+        options={{ title: 'Oops!' }} 
+      />
+      <Stack.Group screenOptions={{ presentation: "modal" }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
       </Stack.Group>
     </Stack.Navigator>
   );
 }
 
-/**
- * A bottom tab navigator displays tab buttons on the bottom of the display to switch screens.
- * https://reactnavigation.org/docs/bottom-tab-navigator
- */
 const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
 function BottomTabNavigator() {

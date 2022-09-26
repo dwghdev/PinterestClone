@@ -1,13 +1,14 @@
 import { View, Image, Text, StyleSheet, Pressable } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
+
+import { useNavigation } from "@react-navigation/native";
 import { useState, useEffect } from "react";
 
 const Pin = (props) => {
-  const { image, title } = props.pin;
+  const { id, image, title } = props.pin;
 
   const [ratio, setRatio] = useState(1);
-
-  const onLike = () => { };
+  const navigation = useNavigation();
 
   useEffect(() => {
     if (image) {
@@ -15,8 +16,14 @@ const Pin = (props) => {
     }
   }, [image]);
 
+  const onLike = () => {};
+
+  const goToPinPage = () => {
+    navigation.navigate("Pin", { id });
+  };
+
   return (
-    <View style={styles.pin}>
+    <Pressable onPress={goToPinPage} style={styles.pin}>
       <View>
         <Image
           source={{ uri: image }}
@@ -28,8 +35,10 @@ const Pin = (props) => {
         </Pressable>
       </View>
 
-      <Text style={styles.title}>{title}</Text>
-    </View>
+      <Text style={styles.title} numberOfLines={2}>
+        {title}
+      </Text>
+    </Pressable>
   );
 };
 
@@ -38,9 +47,11 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   title: {
-    margin: 10,
-    fontSize: 20,
-    fontWeight: "bold",
+    margin: 5,
+    fontSize: 16,
+    lineHeight: 22,
+    color: "#181818",
+    fontWeight: "600",
   },
   image: {
     width: "100%",
@@ -50,7 +61,7 @@ const styles = StyleSheet.create({
     right: 10,
     bottom: 10,
     padding: 5,
-    borderRadius: 50,
+    borderRadius: 15,
     position: "absolute",
     backgroundColor: "#D3CFD4",
   },
