@@ -5,6 +5,7 @@ import HomeScreen from '../screens/HomeScreen';
 import ModalScreen from '../screens/ModalScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
+import CreatePinScreen from "../screens/CreatePinScreen";
 import LinkingConfiguration from './LinkingConfiguration';
 
 import { 
@@ -84,6 +85,14 @@ function BottomTabNavigator() {
       <BottomTab.Screen
         name="Home"
         component={HomeScreen}
+        options={({ navigation }: RootTabScreenProps<"Home">) => ({
+          title: "Home",
+          tabBarIcon: ({ color }) => <FontAwesome size={24} name="home" color={color} />,
+        })}
+      />
+      <BottomTab.Screen
+        name="CreatePin"
+        component={CreatePinScreen}
         options={({ navigation }: RootTabScreenProps<"Home">) => ({
           title: "Home",
           tabBarIcon: ({ color }) => <FontAwesome size={24} name="home" color={color} />,
