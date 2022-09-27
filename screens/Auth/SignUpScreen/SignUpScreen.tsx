@@ -1,12 +1,14 @@
 import { 
   View, 
   Text, 
+  Alert,
   TextInput, 
   StyleSheet, 
   ScrollView, 
 } from "react-native";
 
 import { useState } from "react";
+import { useNhostClient } from "@nhost/react";
 import { useNavigation } from "@react-navigation/core";
 
 import Colors from "../../../constants/Colors";
@@ -16,13 +18,28 @@ import SocialSignInButtons from "../components/SocialSignInButtons";
 const SignUpScreen = () => {
   const navigation = useNavigation();
 
+  const nhost = useNhostClient();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const onRegisterPressed = () => {
-    console.warn("Sign up");
+  const onRegisterPressed = async () => {
+    const result = await nhost.auth.signUp({
+      email,
+      password,
+      options: {
+        displayName: name
+      }
+    });
+
+    if (result.error) {
+      Alert.alert("Error signing up", result.error.message);
+    } else {
+      navigation.navigate("Sign in");
+    }
   };
+
 
   const onSignInPress = () => {
     navigation.navigate("Sign in");
