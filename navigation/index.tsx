@@ -1,12 +1,15 @@
 import * as React from "react";
 import Colors from '../constants/Colors';
+
 import PinScreen from '../screens/PinScreen';
 import HomeScreen from '../screens/HomeScreen';
 import ModalScreen from '../screens/ModalScreen';
 import ProfileScreen from '../screens/ProfileScreen';
-import NotFoundScreen from '../screens/NotFoundScreen';
+import NotFoundScreen from "../screens/NotFoundScreen";
 import CreatePinScreen from "../screens/CreatePinScreen";
-import LinkingConfiguration from './LinkingConfiguration';
+
+import AuthStackNavigator from "./AuthStackNavigator";
+import LinkingConfiguration from "./LinkingConfiguration";
 
 import { 
   RootTabParamList, 
@@ -49,16 +52,21 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 function RootNavigator() {
   return (
     <Stack.Navigator>
+      <Stack.Screen
+        name="Auth"
+        component={AuthStackNavigator}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen 
         name="Root" 
         component={BottomTabNavigator} 
         options={{ headerShown: false }} 
-        />
+      />
       <Stack.Screen 
         name="Pin" 
         component={PinScreen} 
         options={{ headerShown: false }} 
-        />
+      />
       <Stack.Screen 
         name="NotFound" 
         component={NotFoundScreen} 
