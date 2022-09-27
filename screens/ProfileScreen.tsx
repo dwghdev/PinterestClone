@@ -1,17 +1,68 @@
-import React from "react";
-import { Text, View } from "../components/Themed";
 import { Entypo, Feather } from "@expo/vector-icons";
-import { StyleSheet, Image, ScrollView } from "react-native";
-
-import MasonryList from "../components/MasonryList";
+import { useNhostClient, useSignOut, useUserId } from "@nhost/react";
+import React, { useEffect, useState } from "react";
+import {
+  StyleSheet,
+  Image,
+  ScrollView,
+  Pressable,
+  Alert,
+  ActivityIndicator,
+} from "react-native";
 import pins from "../assets/data/pins";
+import MasonryList from "../components/MasonryList";
+
+import { Text, View } from "../components/Themed";
+
+const GET_USER_QUERY = `
+  query MyQuery($id: uuid!) {
+    user(id: $id) {
+      id
+      avatarUrl
+      displayName
+      pins {
+        id
+        image
+        title
+        created_at
+      }
+    }
+  }
+`;
 
 export default function ProfileScreen() {
+  const [user, setUser] = useState();
+
+  const { signOut } = useSignOut();
+  const nhost = useNhostClient();
+
+  const userId = useUserId();
+
+  const fetchUserData = async () => {
+    const result = await nhost.graphql.request(GET_USER_QUERY, { id: userId });
+    console.log(result);
+    if (result.error) {
+      Alert.alert("Error fetching the user");
+    } else {
+      setUser(result.data.user);
+    }
+  };
+
+  useEffect(() => {
+    (async() => await fetchUserData())();
+  }, []);
+
+  if (!user) {
+    return <ActivityIndicator />;
+  }
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
         <View style={styles.icons}>
-          <Feather name="share" size={24} color="black" style={styles.icon} />
+          <Pressable onPress={signOut}>
+            <Feather name="share" size={24} color="black" style={styles.icon} />
+          </Pressable>
           <Entypo
             name="dots-three-horizontal"
             size={24}
@@ -21,14 +72,16 @@ export default function ProfileScreen() {
         </View>
 
         <Image
-          source={{ uri: "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/vadim.png" }}
+          source={{
+            uri: user.avatarUrl,
+          }}
           style={styles.image}
         />
-        <Text style={styles.title}>Vadim Savin</Text>
+        <Text style={styles.title}>{user.displayName}</Text>
         <Text style={styles.subtitle}>123 Followers | 534 Followings</Text>
       </View>
 
-      <MasonryList pins={pins} />
+      <MasonryList pins={user.pins} onRefresh={fetchUserData} />
     </ScrollView>
   );
 }

@@ -24,7 +24,7 @@ export default function App() {
     return (
       <NhostReactProvider nhost={nhost}>
         <SafeAreaProvider>
-          <Navigation colorScheme={colorScheme} />
+          <Navigation colorScheme={null} />
           <StatusBar />
         </SafeAreaProvider>
       </NhostReactProvider>

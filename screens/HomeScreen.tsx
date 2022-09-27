@@ -13,8 +13,10 @@ import Pin from "../components/Pin";
 function HomeScreen() {
   const nhost = useNhostClient();
   const [pins, setPins] = useState([]);
+  const [loading, setLoading] = useState(false); 
 
   const fetchPins = async () => {
+    setLoading(true);
     const response = await nhost.graphql.request(`
       query MyQuery {
         pins {
@@ -32,15 +34,20 @@ function HomeScreen() {
     } else {
       setPins(response.data.pins);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
-    (async() => {
-      await fetchPins();
-    })();
+    (async() => await fetchPins())();
   }, []);
 
-  return <MasonryList pins={pins} />;
+  return ( 
+    <MasonryList 
+      pins={pins} 
+      refreshing={loading} 
+      onRefresh={fetchPins} 
+    />
+  );
 }
 
 export default HomeScreen;

@@ -53,17 +53,17 @@ const SignInScreen = () => {
 
         <TextInput
           value={email}
-          onChangeText={setEmail}
-          placeholder="Eamil"
+          placeholder="Email"
           style={styles.input}
+          onChangeText={setEmail}
         />
 
         <TextInput
-          value={password}
-          onChangeText={setPassword}
-          placeholder="Password"
           secureTextEntry
+          value={password}
           style={styles.input}
+          placeholder="Password"
+          onChangeText={setPassword}
         />
 
         <CustomButton text="Sign In" onPress={onSignInPressed} />
